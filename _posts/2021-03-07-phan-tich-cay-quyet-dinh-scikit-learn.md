@@ -6,8 +6,6 @@ categories: [blog, python, scikit-learn]
 tags: [blog, python, scikit-learn]
 math: true
 mermaid: true
-image:
-  src: '/assets/img/posts/linearregression3-768x174.png'
 ---
 
 Phân tích cây quyết định (Decision Tree Analysis)
