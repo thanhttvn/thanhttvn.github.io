@@ -6,6 +6,8 @@ categories: [blog, python, scikit-learn]
 tags: [blog, python, scikit-learn]
 math: true
 mermaid: true
+image:
+  src: '/assets/img/posts/1_Bg0_UGT6xo89Ij-GX61yPg.png'
 ---
 
 Phân tích cây quyết định (Decision Tree Analysis)
