@@ -34,7 +34,7 @@ $$
 
  Giả sử tần số đồng thời xuất hiện của từ x và y ký hiệu là C(x, y). Số lần xuất hiện từ x, y tương ứng là C(x), C(y). Số từ trong corpus là N thì công thức trên có thể viết lại như sau:
 $$
-PMI(x, y) = log_{2}  \frac{P(x, y)}{P(x)P(y)} = log_{2}  \frac{ \frac{C(x,y)}{N} }{ \frac{C(x)}{N}\frac{C(y)}{N} } = log_{2}  \frac{C(x, y) ・ N}{C(x)C(y)}
+PMI(x, y) = log_{2}  \frac{P(x, y)}{P(x)P(y)} = log_{2}  \frac{ \frac{C(x,y)}{N} }{ \frac{C(x)}{N}\frac{C(y)}{N} } = log_{2}  \frac{C(x, y) ・ N}{C(x)C(y)}
 $$
 
  OK, vậy là đã có công thức để tính PMI từ **co-occurence matrix**. Xét 1 ví dụ cụ thể sau:
