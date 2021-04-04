@@ -1,0 +1,105 @@
+<p>Chào các bạn, hôm nay mình sẽ viết tiếp phần 2, cũng là phần cuối về việc giới thiệu, sử dụng Pandas trong Python để thao tác, xử lý dữ liệu.
+Bài lần trước các bạn đã biết cách tạo Pandas DataFrame, các cách hiển thị dữ liêu, filter cũng như thêm cột vào DataFrame. Lần này, chúng ta tiếp tục thử tính toán, <code class="language-plaintext highlighter-rouge">Pivoting</code>, và cách sử dụng <code class="language-plaintext highlighter-rouge">Group by</code>.</p>
+
+<h2 id="tính-toán-thống-kê">Tính toán thống kê</h2>
+<p>Thử tính toán theo hàng hoặc cột của DataFrame</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="c1">#Tính tổng theo cột
+</span><span class="n">df_sample</span><span class="p">[</span><span class="s">"point1"</span><span class="p">].</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># Tính tổng tất cả giá trị của point1
+#axis=0 nghĩa là hướng tính sum theo chiều dọc, mặc định là 0 nên không cần viết lại cũng được
+</span>
+<span class="n">df_sample</span><span class="p">[[</span><span class="s">"point1"</span><span class="p">,</span><span class="s">"point2"</span><span class="p">]].</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1">#score1,score2 khi đồng thời muốn tính 2 cột. Trả về 2 giá trị.
+#point1    750.0
+#point2    750.0
+</span>
+
+<span class="c1">#Tính theo hàng
+</span><span class="n">df_sample</span><span class="p">[[</span><span class="s">"point1"</span><span class="p">,</span><span class="s">"point2"</span><span class="p">]].</span><span class="nb">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  
+<span class="c1">#Tính tổng theo từng dòng, tổng = cột point1 + point2
+#axis=1 thì hướng tính sum theo hàng ngang. Ở Pandas, sử dụng axis nhiều nên bạn biết rõ thì sẽ tốt hơn.
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Để biểu thị axis = 0 và 1 nghĩa là thế nào, đơn giản như hình sau:
+<img src="http://localhost:2368/content/images/2017/08/axis.jpg" alt="axis" />
+Như hình trên, ví dụ muốn tính toán theo hàng, tức là theo chiều ngang →　 axis=1</p>
+
+<h2 id="pivoting">Pivoting</h2>
+<p>Hỗ trợ rất nhiều trong việc tính toán group by theo cột, được ứng dụng rất nhiều trong thực tế công việc.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre><span class="n">df_sample</span><span class="p">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="s">"point1"</span><span class="p">,</span>     <span class="c1">#Chỉ định cột cần tính
+</span>                       <span class="n">aggfunc</span><span class="o">=</span><span class="s">"sum"</span><span class="p">,</span>  <span class="c1"># Cách tính
+</span>                       <span class="n">fill_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>   <span class="c1"># Trong TH không có giá trị thì fill 0
+</span>                       <span class="n">index</span><span class="o">=</span><span class="s">"class"</span><span class="p">,</span>  <span class="c1"># Giống như groupby, Cột nào sẽ làm hàng
+</span>                       <span class="n">columns</span><span class="o">=</span><span class="s">"day_no"</span><span class="p">)</span>   <span class="c1">#Cột nào sẽ làm cột
+#day_no  day1  day2
+#class             
+#A        300     0
+#B          0   300
+#C        100    50
+</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="group_by">Group_by</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="n">df_sample_grouped</span> <span class="o">=</span> <span class="n">df_sample</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"day_no"</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>  <span class="c1"># Group_by theo day_no
+</span><span class="n">df_sample_grouped</span><span class="p">[[</span><span class="s">"point1"</span><span class="p">,</span><span class="s">"point2"</span><span class="p">]].</span><span class="nb">sum</span><span class="p">()</span>
+<span class="c1"># Sử dụng sum với object df_sample_grouped.
+#        point1  point2
+#day_no                
+#day1       400     330
+#day2       350     420
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><strong>Lưu ý:</strong> <code class="language-plaintext highlighter-rouge">as_index=True</code> thì key sử dụng làm <code class="language-plaintext highlighter-rouge">groupBy</code> sẽ thành index
+<code class="language-plaintext highlighter-rouge">as_index=False</code> thì sẽ đánh index lại từ 0.
+Lợi ích của việc sử dụng <code class="language-plaintext highlighter-rouge">as_index=True</code> là nếu muốn lấy dữ liệu <code class="language-plaintext highlighter-rouge">day1</code> thì chỉ cần:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="n">df_sample_grouped</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="s">'day1'</span><span class="p">]</span>
+<span class="c1">#point1    400
+#point2    330
+#Name: day1, dtype: int64
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Nếu <code class="language-plaintext highlighter-rouge">as_index=False</code> và muốn lấy dữ liệu <code class="language-plaintext highlighter-rouge">day1</code> thì index lúc này không phải là day_no nên cần phải làm như sau :</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="n">df_sample_grouped</span><span class="p">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_sample_grouped</span><span class="p">.</span><span class="n">day_no</span> <span class="o">==</span> <span class="s">'day1'</span><span class="p">]</span>
+<span class="c1">#  day_no    point1  point2
+#0   day1     400     330
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+<p>Về hiệu năng thì tương tự như việc đánh index trong SQL, sử dụng <code class="language-plaintext highlighter-rouge">df_sample_grouped.loc['day1']</code> sẽ nhanh hơn rất nhiều.
+##Tổng kết
+Phần 2 cũng là kết thúc chuỗi bài viết về Pandas, trên đây là những chức năng hay sử dụng trong quá trình thực tế. Chắc chắn sẽ giúp ích cho các bạn mới làm quen với Pandas. Hẹn gặp lại các bạn ở các bài viết sau.</p>
